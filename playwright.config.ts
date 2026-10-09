@@ -28,7 +28,7 @@ export default defineConfig({
   launchOptions: {
     slowMo: 1000,
   },
-  headless: false,
+  headless: true,
   trace: 'on-first-retry',
 },
   /* Configure projects for major browsers */
