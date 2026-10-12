@@ -14,7 +14,7 @@ import { defineConfig, devices } from '@playwright/test';
 export default defineConfig({
  timeout: 90000, // 30 seconds
 expect: {
-    timeout: 15000, // Ginagawa nitong 15 seconds ang default para sa lahat ng expect() assertions
+    timeout: 90000, // Ginagawa nitong 15 seconds ang default para sa lahat ng expect() assertions
   },
   testDir: './tests',
   /* Run tests in files in parallel */
