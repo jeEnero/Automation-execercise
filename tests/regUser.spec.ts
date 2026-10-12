@@ -3,12 +3,15 @@ import {test, expect} from '@playwright/test';
 
 
 test('Register user', async ({page}) => {
+const uniqueEmail = `test_${Date.now()}@gmail.com`;
+
+
  await page.goto('http://automationexercise.com')
  await expect(page).toHaveTitle(/Automation Exercise/);
  await page.getByRole('link', { name: ' Signup / Login' }).click();
  await expect(page.getByRole('heading', { name: 'New User Signup!' })).toBeVisible();
  await page.locator('input[data-qa=signup-name]').fill('jerome')  
- await page.locator('input[data-qa=signup-email]').fill('Test125342@gmail.com')   
+ await page.locator('input[data-qa=signup-email]').fill(uniqueEmail)   
  await page.getByRole('button', {name: 'Signup'}).click()
 await expect(page).toHaveURL('https://automationexercise.com/signup')
  await expect(page.getByRole('heading', {name: 'Enter Account Information'})).toBeVisible();
