@@ -35,7 +35,7 @@ await expect(page).toHaveURL('https://automationexercise.com/signup')
   await expect(page.getByRole('heading', {name: 'Account Created!'})).toBeVisible()
  await page.getByRole('link', {name: 'Continue'}).click()
 await expect(page.locator('a', { hasText: 'Logged in as' })).toBeVisible();
- await page.getByRole('link', {name: ' Delete Account'}).click()
+ await page.getByRole('link', {name: 'Delete Account'}).click()
  await expect(page.getByRole('heading', {name: 'Account Deleted!'})).toBeVisible();
 
 
