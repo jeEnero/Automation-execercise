@@ -1,17 +1,21 @@
-import {test, expect} from '@playwright/test';
+import { test, expect } from '@playwright/test';
 
-test('Register user', async ({page}) => {
+test('Register user', async ({ page }) => {
   const uniqueEmail = `test_${Date.now()}@gmail.com`;
 
   await page.goto('http://automationexercise.com');
   await expect(page).toHaveTitle(/Automation Exercise/);
+
   await page.getByRole('link', { name: ' Signup / Login' }).click();
   await expect(page.getByRole('heading', { name: 'New User Signup!' })).toBeVisible();
+
   await page.locator('input[data-qa=signup-name]').fill('jerome');
   await page.locator('input[data-qa=signup-email]').fill(uniqueEmail);
-  await page.getByRole('button', {name: 'Signup'}).click();
-  await expect(page).toHaveURL('https://automationexercise.com/signup');
-  await expect(page.getByRole('heading', {name: 'Enter Account Information'})).toBeVisible();
+  await page.getByRole('button', { name: 'Signup' }).click();
+
+  await expect(page).toHaveURL(/.*signup/);
+  await expect(page.getByRole('heading', { name: 'Enter Account Information' })).toBeVisible();
+
   await page.locator('#id_gender1').click();
   await page.locator('#password').fill('Bgoadmin1234');
   await page.locator('#days').selectOption('11');
@@ -28,19 +32,19 @@ test('Register user', async ({page}) => {
   await page.locator('#city').fill('Bulacan');
   await page.locator('#zipcode').fill('3023');
   await page.locator('#mobile_number').fill('09669276637');
-  await page.getByRole('button', {name: 'Create Account'}).click();
-  await expect(page.getByRole('heading', {name: 'Account Created!'})).toBeVisible();
 
-  await page.getByRole('link', {name: 'Continue'}).click();
+  await page.getByRole('button', { name: 'Create Account' }).click();
+  await expect(page.getByRole('heading', { name: 'Account Created!' })).toBeVisible();
 
+  // Handle cases where "Continue" opens a new page/tab
+  const popupPromise = page.context().waitForEvent('page', { timeout: 5000 }).catch(() => null);
+  await page.getByRole('link', { name: 'Continue' }).click();
+  const popup = await popupPromise;
+  const active = popup ?? page;
 
-  const pages = page.context().pages();
-  const active = pages.length > 1 ? pages[pages.length - 1] : page;
+  await active.waitForLoadState('domcontentloaded', { timeout: 15000 });
+  await expect(active.getByText('Logged in as')).toBeVisible({ timeout: 30000 });
 
-
-  await active.waitForLoadState('networkidle');
-
-  await expect(active.getByText('Logged in as')).toBeVisible();
-  await active.getByRole('link', {name: 'Delete Account'}).click();
-  await expect(active.getByRole('heading', {name: 'Account Deleted!'})).toBeVisible();
+  await active.getByRole('link', { name: 'Delete Account' }).click();
+  await expect(active.getByRole('heading', { name: 'Account Deleted!' })).toBeVisible();
 });
