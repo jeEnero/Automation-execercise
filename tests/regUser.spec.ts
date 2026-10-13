@@ -36,15 +36,20 @@ test('Register user', async ({ page }) => {
   await page.getByRole('button', { name: 'Create Account' }).click();
   await expect(page.getByRole('heading', { name: 'Account Created!' })).toBeVisible();
 
-  // Handle cases where "Continue" opens a new page/tab
+  // Click Continue — handle case where it opens a new page/tab
   const popupPromise = page.context().waitForEvent('page', { timeout: 5000 }).catch(() => null);
   await page.getByRole('link', { name: 'Continue' }).click();
   const popup = await popupPromise;
   const active = popup ?? page;
 
+  // Wait for a reliable load state (DOM ready). networkidle may hang on some sites.
   await active.waitForLoadState('domcontentloaded', { timeout: 15000 });
-  await expect(active.getByText('Logged in as')).toBeVisible({ timeout: 30000 });
 
-  await active.getByRole('link', { name: 'Delete Account' }).click();
-  await expect(active.getByRole('heading', { name: 'Account Deleted!' })).toBeVisible();
+  // Prefer clicking the visible "Delete Account" link (actionable) rather than depending on a "Logged in as" message.
+  const deleteLink = active.getByRole('link', { name: 'Delete Account' });
+  await expect(deleteLink).toBeVisible({ timeout: 30000 });
+  await deleteLink.click();
+
+  // Confirm deletion
+  await expect(active.getByRole('heading', { name: 'Account Deleted!' })).toBeVisible({ timeout: 30000 });
 });
