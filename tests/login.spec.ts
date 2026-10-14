@@ -10,5 +10,4 @@ test('Login - Happy path', async({page})=>{
     await page.locator('input[data-qa = login-email]').fill('Jeromeenero459@gmail.com')
     await page.locator('input[data-qa = login-password]').fill('Letmein1027[')
     await expect(page.getByText(' Logged in as ')).toBeVisible
-
 })
