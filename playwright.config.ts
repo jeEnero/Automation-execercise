@@ -39,7 +39,7 @@ export default defineConfig({
 
     // Avoid slowing CI runs; set slowMo only for local debugging (0 here)
     launchOptions: {
-      slowMo: 0,
+      slowMo: 1000,
     },
   },
 
