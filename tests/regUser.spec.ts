@@ -32,6 +32,7 @@ test('Register user', async ({ page }) => {
   await page.locator('#city').fill('Bulacan');
   await page.locator('#zipcode').fill('3023');
   await page.locator('#mobile_number').fill('09669276637');
+  //Test
 
   await page.getByRole('button', { name: 'Create Account' }).click();
   await expect(page.getByRole('heading', { name: 'Account Created!' })).toBeVisible();
