@@ -3,7 +3,7 @@ import {BASE_URL} from '../util/URL'
 
 
 
-test('', async({page}) => {
+test('Add Products in Cart', async({page}) => {
  await page.goto(BASE_URL)
  await page.locator('a[href="/login"]').click()
  await page.locator('input[data-qa="login-email"]').fill('Jeromeenero459@gmail.com')
@@ -16,3 +16,4 @@ test('', async({page}) => {
  await page.locator('a[href="/view_cart"]').nth(0).click()
  await expect(page.locator('a[href="/product_details/1"]')).toBeVisible()
 })
+
